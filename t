@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
+set -u
+file="$HOME/.todo"
+backupdir="$HOME/.bak"
 
 normal=$(tput sgr0)
 red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 
+lotate() {
+    mv $backupdir/`basename $file`.2 $backupdir/`basename $file`.3 
+    mv $backupdir/`basename $file`.1 $backupdir/`basename $file`.2 
+    mv $backupdir/`basename $file`.0 $backupdir/`basename $file`.1 
+    cp $file $backupdir/`basename $file`.0 
+}
 
 info () {
     printf "%b" "[${green}$1${normal}] $2 \n"
@@ -16,6 +25,7 @@ argument_expected() {
 
 list() {
     ((i=1))
+    local done=""
     while read -r line
     do
         if [[ $line = "----------" ]]; then
@@ -23,7 +33,7 @@ list() {
             break
         fi
 
-        if [[ ! $done ]]; then
+        if [[ ! "$done" ]]; then
             echo "[$i] $line"
             ((i++))
         fi
@@ -70,7 +80,7 @@ check() {
 }
 
 check_args() {
-    while [ ! -z "$1" ]; do
+    while [ $# -gt 1 ]; do
         local arg="$1"
         case "$1" in
             add|a)
@@ -105,10 +115,10 @@ check_args() {
 }
 
 main() {
-
+    lotate 
     touch ~/.todo
 
-    if [ -z "$1" ]; then
+    if [ $# -eq 0 ]; then
         list
     fi
 
