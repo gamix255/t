@@ -9,6 +9,11 @@ green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 
 lotate() {
+    mkdir -p $backupdir   
+    touch $backupdir/`basename $file`.3
+    touch $backupdir/`basename $file`.2
+    touch $backupdir/`basename $file`.1
+    touch $backupdir/`basename $file`.0
     mv $backupdir/`basename $file`.2 $backupdir/`basename $file`.3 
     mv $backupdir/`basename $file`.1 $backupdir/`basename $file`.2 
     mv $backupdir/`basename $file`.0 $backupdir/`basename $file`.1 
